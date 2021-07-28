@@ -1,0 +1,23 @@
+<resources>
+  <string name="app_name">Paddock Builder</string>
+  <string name="intro_header_text">Choose your drivers, name your team, and go racing!</string>
+  <string name="introStartButtonText">Build your team</string>
+  <string name="driverNameHeaderText">Name</string>
+  <string name="driverTeamHeader">Team</string>
+  <string name="pageTitleBuildDrivers">Drivers</string>
+  <string name="errorMessageMaxDrivers">You can only select two drivers</string>
+  <string name="contentDescriptionSaveButton">Save driver selection</string>
+  <string name="pageTitleTeam">Team</string>
+  <string name="hintTeamName">Team Name</string>
+  <string name="headerDrivers">Drivers</string>
+  <string name="pageHeaderTeam">Set a name for your team</string>
+  <string name="pageHeaderDrivers">Select the two drivers for your team</string>
+  <string name="teamBuildSuccessMessage">It\'s lights out and your team is ready! Have fun in the upcoming F1 season.</string>
+  <string name="iconCredits">Icon credits: https://www.flaticon.com/authors/nikita-golubev</string>
+  <string name="helmetIconCredits">Icon credits: https://www.freepik.com</string>
+  <string name="contentDescriptionCarIcon">Race car icon</string>
+  <string name="pageTitleBuildResult">Success</string>
+  <string name="contentDescriptionHelmetIcon">Formula 1 helmet</string>
+  <string name="headerTextCompetitorsList">Competitors</string>
+  <string name="errorMessageTeamName">Invalid team name</string>
+</resources>
