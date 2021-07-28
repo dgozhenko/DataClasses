@@ -32,20 +32,42 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.paddockbuilder.repository
+package com.raywenderlich.android.paddockbuilder.build.driver
 
-data class Driver(
-    val id: String,
-    val number: Int,
-    val firstName: String,
-    val lastName: String,
-    val nationality: String,
-    val currentTeamId: String,
-)
+import androidx.lifecycle.ViewModel
+import com.raywenderlich.android.paddockbuilder.repository.Driver
+import com.raywenderlich.android.paddockbuilder.repository.DriversRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
-data class Constructor(
-    val id: String,
-    val name: String,
-    val drivers: List<Driver>
-)
+class BuildDriversViewModel : ViewModel() {
 
+  private val _driversWithSelection = MutableStateFlow<List<DriverWithSelection>>(emptyList())
+  private val _selectedDrivers = mutableSetOf<Driver>()
+
+  val driversWithSelection: Flow<List<DriverWithSelection>>
+    get() = _driversWithSelection
+  val selectedDrivers: Set<Driver>
+    get() = _selectedDrivers
+
+  init {
+    _driversWithSelection.value = DriversRepository.all().map {
+      DriverWithSelection(it, false)
+    }
+  }
+
+  fun toggleDriver(driver: Driver) {
+    if (driver in _selectedDrivers) {
+      _selectedDrivers.remove(driver)
+    } else {
+      _selectedDrivers.add(driver)
+    }
+    updateSelectionSet()
+  }
+
+  private fun updateSelectionSet() {
+    _driversWithSelection.value = DriversRepository.all().map {
+      DriverWithSelection(it, it in _selectedDrivers)
+    }
+  }
+}

@@ -32,20 +32,47 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.paddockbuilder.repository
+package com.raywenderlich.android.paddockbuilder.build.team
 
-data class Driver(
-    val id: String,
-    val number: Int,
-    val firstName: String,
-    val lastName: String,
-    val nationality: String,
-    val currentTeamId: String,
-)
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.raywenderlich.android.paddockbuilder.repository.Driver
+import com.raywenderlich.android.paddockbuilder.repository.DriversRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
-data class Constructor(
-    val id: String,
-    val name: String,
-    val drivers: List<Driver>
-)
+data class TeamDetails(val teamName: String = "")
 
+class BuildTeamViewModel(driverIds: Array<String>) : ViewModel() {
+
+  private val _selectedDrivers = MutableStateFlow(emptyList<Driver>())
+  private val _teamDetails = MutableStateFlow(TeamDetails())
+
+  val selectedDrivers: StateFlow<List<Driver>>
+    get() = _selectedDrivers
+
+  val teamDetails: StateFlow<TeamDetails>
+    get() = _teamDetails
+
+  init {
+    val (driverOneId, driverTwoId) = driverIds
+    val drivers = listOfNotNull(
+        DriversRepository.forId(driverOneId),
+        DriversRepository.forId(driverTwoId),
+    )
+    _selectedDrivers.value = drivers
+  }
+
+  fun updateTeamName(newName: String) {
+    val teamDetails = _teamDetails.value
+    _teamDetails.value = teamDetails.copy(teamName = newName)
+  }
+
+  class Factory(private val driverIds: Array<String>) : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+      @Suppress("UNCHECKED_CAST")
+      return BuildTeamViewModel(driverIds) as T
+    }
+  }
+}

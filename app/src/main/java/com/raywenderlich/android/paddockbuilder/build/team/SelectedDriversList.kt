@@ -32,20 +32,53 @@
  * THE SOFTWARE.
  */
 
-package com.raywenderlich.android.paddockbuilder.repository
+package com.raywenderlich.android.paddockbuilder.build.team
 
-data class Driver(
-    val id: String,
-    val number: Int,
-    val firstName: String,
-    val lastName: String,
-    val nationality: String,
-    val currentTeamId: String,
-)
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
+import com.raywenderlich.android.paddockbuilder.databinding.ItemSelectedDriverBinding
+import com.raywenderlich.android.paddockbuilder.repository.Driver
 
-data class Constructor(
-    val id: String,
-    val name: String,
-    val drivers: List<Driver>
-)
+@SuppressLint("SetTextI18n")
+class SelectedDriverViewHolder(
+    private val binding: ItemSelectedDriverBinding
+) : RecyclerView.ViewHolder(binding.root) {
 
+  fun bind(driver: Driver) {
+    binding.apply {
+      driverNumber.text = driver.number.toString()
+      driverName.text = "${driver.firstName} ${driver.lastName}"
+      driverNationality.text = driver.nationality
+    }
+  }
+}
+
+@SuppressLint("DiffUtilEquals")
+class DriverDiffer : DiffUtil.ItemCallback<Driver>() {
+
+  override fun areItemsTheSame(oldItem: Driver, newItem: Driver): Boolean {
+    return oldItem.id == newItem.id
+  }
+
+  override fun areContentsTheSame(oldItem: Driver, newItem: Driver): Boolean {
+    return oldItem == newItem
+  }
+}
+
+class SelectedDriversAdapter : ListAdapter<Driver, SelectedDriverViewHolder>(DriverDiffer()) {
+
+  override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedDriverViewHolder {
+    val inflater = LayoutInflater.from(parent.context)
+    val binding = ItemSelectedDriverBinding.inflate(inflater, parent, false)
+    return SelectedDriverViewHolder(binding)
+  }
+
+  override fun onBindViewHolder(holder: SelectedDriverViewHolder, position: Int) {
+    holder.bind(getItem(position))
+  }
+
+}
