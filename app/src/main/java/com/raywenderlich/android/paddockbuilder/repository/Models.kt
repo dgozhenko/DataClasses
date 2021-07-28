@@ -34,7 +34,7 @@
 
 package com.raywenderlich.android.paddockbuilder.repository
 
-class Driver(
+data class Driver(
     val id: String,
     val number: Int,
     val firstName: String,
@@ -43,7 +43,7 @@ class Driver(
     val currentTeamId: String,
 )
 
-class Constructor(
+data class Constructor(
     val id: String,
     val name: String,
     val drivers: List<Driver>
